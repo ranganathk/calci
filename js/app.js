@@ -33,4 +33,7 @@ $(document).ready(function() {
   $('.key').click(function(event){
     Calci.handleKeyPress(this);
   });
+  $(document).bind('keyup', 'ctrl', function(){
+    console.log('Control key pressed');
+  });
 });
