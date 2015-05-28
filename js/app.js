@@ -9,6 +9,8 @@ Calci = {
     multiply: "MULTIPLY",
     dot: "DOT"
   },
+  lastKeyWasOperation: false,
+  lastKeyWasDot: false,
   clearDisplay: function() {
     $('#preview').html("");
     $('#result').html("0");    
@@ -38,9 +40,28 @@ Calci = {
       Calci.calculateResult();
       break;
     default:
-      $('#preview').html(
-        $('#preview').html() + val
-      );
+      if(val == '.' && Calci.lastKeyWasDot) {
+        // Nothing to do. Ignore the current dot
+      } else {
+        if((['+', '-', '*', '/'].indexOf(val) != -1) && Calci.lastKeyWasOperation) {
+          Calci.deleteCharFromPreview();
+        }
+        $('#preview').html(
+          $('#preview').html() + val
+        );
+      }
+    }
+
+    if (val == '.') {
+      Calci.lastKeyWasDot = true;
+    } else {
+      Calci.lastKeyWasDot = false;
+    }
+
+    if (['+', '-', '*', '/'].indexOf(val) == -1) {
+      Calci.lastKeyWasOperation = false;
+    } else {
+      Calci.lastKeyWasOperation = true;
     }
   },
   watchKeyClick: function() {
