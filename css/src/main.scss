@@ -42,16 +42,12 @@ html {
     .key {
       padding: 0;
       height: 12vmin;
-      width: 12vmin;
       background-color: $primary-color;
       box-sizing: border-box;
       text-align: center;
       line-height: 12vmin;
       font-size: 3vmin;
-      
-      &#equals {
-        width: 24vmin;
-      }
+      border: 1px solid $lighter-primary-color;
       
       &#plus {
         height: 24vmin;

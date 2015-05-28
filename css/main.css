@@ -29,14 +29,12 @@ html {
     html #calculator .key {
       padding: 0;
       height: 12vmin;
-      width: 12vmin;
       background-color: #8e44ad;
       box-sizing: border-box;
       text-align: center;
       line-height: 12vmin;
-      font-size: 3vmin; }
-      html #calculator .key#equals {
-        width: 24vmin; }
+      font-size: 3vmin;
+      border: 1px solid #9b59b6; }
       html #calculator .key#plus {
         height: 24vmin;
         line-height: 24vmin; }
