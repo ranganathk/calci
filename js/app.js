@@ -2,13 +2,17 @@ Calci = {
   clearPreview: function() {
     $('#preview').html("");
   },
+  deleteCharFromPreview: function() {
+    var preview = $('#preview').html();
+    $('#preview').html(preview.slice(0, preview.length-1));
+  },
   handleKeyPress: function(key) {
     switch($(key).text()) {
     case "AC":
       Calci.clearPreview();
       break;
     case "DEL":
-      console.log($(key).text());
+      Calci.deleteCharFromPreview();
       break;
     case "=":
       console.log($(key).text());
