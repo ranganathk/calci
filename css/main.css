@@ -35,12 +35,12 @@ html {
       line-height: 12vmin;
       font-size: 3vmin;
       border: 1px solid #9b59b6; }
-      html #calculator .key#plus {
+      html #calculator .key#key-PLUS {
         height: 24vmin;
         line-height: 24vmin; }
       html #calculator .key:hover {
         background-color: #9b59b6; }
-      html #calculator .key:active {
+      html #calculator .key:active, html #calculator .key.active {
         background-color: #7f3d9b; }
     html #calculator .key-group {
       padding: 0; }

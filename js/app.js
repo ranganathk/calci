@@ -1,5 +1,15 @@
 Calci = {
-  clear: function() {
+  constants: {
+    ac: "AC",
+    del: "DEL",
+    eql: "EQL",
+    plus: "PLUS",
+    minus: "MINUS",
+    division: "DIVISION",
+    multiply: "MULTIPLY",
+    dot: "DOT"
+  },
+  clearDisplay: function() {
     $('#preview').html("");
     $('#result').html("0");    
   },
@@ -12,13 +22,13 @@ Calci = {
   },
   handleInput: function(val) {
     switch(val) {
-    case "AC":
-      Calci.clear();
+    case Calci.constants.ac:
+      Calci.clearDisplay();
       break;
-    case "DEL":
+    case Calci.constants.del:
       Calci.deleteCharFromPreview();
       break;
-    case "=":
+    case Calci.constants.eql:
       Calci.calculateResult();
       break;
     default:
@@ -35,6 +45,31 @@ Calci = {
   handleInputFunctionWrapper: function(val) {
     return function() {
       Calci.handleInput(val);
+      var eleId;
+      switch(val) {
+      case '+':
+        eleId = '#key-' + Calci.constants.plus;
+        break;
+      case '.':
+        eleId = '#key-' + Calci.constants.dot;
+        break;
+      case '-':
+        eleId = '#key-' + Calci.constants.minus;
+        break;
+      case '/':
+        eleId = '#key-' + Calci.constants.division;
+        break;
+      case '*':
+        eleId = '#key-' + Calci.constants.multiply;
+        break;
+      case '=':
+        eleId = '#key-' + Calci.constants.eql;
+        break;
+      default:
+        eleId = '#key-' + val;
+      }
+      $(eleId).addClass('active');
+      setTimeout(function(){ $(eleId).removeClass('active'); }, 200);
     }
   },
   watchKeyPress: function() {

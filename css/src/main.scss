@@ -48,8 +48,8 @@ html {
       line-height: 12vmin;
       font-size: 3vmin;
       border: 1px solid $lighter-primary-color;
-      
-      &#plus {
+
+      &#key-PLUS {
         height: 24vmin;
         line-height: 24vmin;
       }
@@ -58,7 +58,7 @@ html {
         background-color: $lighter-primary-color;
       }
       
-      &:active {
+      &:active, &.active {
         background-color: darken($primary-color, 5%);
       }
     }
