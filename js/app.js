@@ -23,6 +23,10 @@ Calci = {
     $('#preview').html(result);
   },
   handleInput: function(val) {
+    if (val == 'X') {
+      val = '*';
+    }
+
     switch(val) {
     case Calci.constants.ac:
       Calci.clearDisplay();
