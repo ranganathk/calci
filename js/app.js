@@ -1,11 +1,22 @@
 Calci = {
+  clearPreview: function() {
+    $('#preview').html("");
+  },
   handleKeyPress: function(key) {
-    if(["AC", "DEL", "="].indexOf($(key).text()) == -1) {
+    switch($(key).text()) {
+    case "AC":
+      Calci.clearPreview();
+      break;
+    case "DEL":
+      console.log($(key).text());
+      break;
+    case "=":
+      console.log($(key).text());
+      break;
+    default:
       $('#preview').html(
         $('#preview').html() + $(key).text()
       );
-    } else { 
-      console.log($(key).text());
     }
   }
 };
