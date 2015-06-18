@@ -8,8 +8,8 @@ html {
   html body {
     height: 100vh; }
   html #calculator {
-    width: 48vmin;
-    height: 84vmin;
+    width: 84vmin;
+    height: 96vmin;
     background-color: #9b59b6;
     color: #ecf0f1; }
     html #calculator #result {
@@ -35,9 +35,6 @@ html {
       line-height: 12vmin;
       font-size: 3vmin;
       border: 1px solid #9b59b6; }
-      html #calculator .key#key-PLUS {
-        height: 24vmin;
-        line-height: 24vmin; }
       html #calculator .key:hover {
         background-color: #9b59b6; }
       html #calculator .key:active, html #calculator .key.active {

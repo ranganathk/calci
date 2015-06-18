@@ -16,8 +16,8 @@ html {
   }
   
   #calculator {
-    width: 48vmin;
-    height: 84vmin;
+    width: 84vmin;
+    height: 96vmin;
     background-color: $lighter-primary-color;
     color: $secondary-color;
     
@@ -49,10 +49,7 @@ html {
       font-size: 3vmin;
       border: 1px solid $lighter-primary-color;
 
-      &#key-PLUS {
-        height: 24vmin;
-        line-height: 24vmin;
-      }
+      
       
       &:hover {
         background-color: $lighter-primary-color;
