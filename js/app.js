@@ -1,3 +1,5 @@
+var preview = "";
+
 Calci = {
   constants: {
     ac: "AC",
@@ -23,68 +25,64 @@ Calci = {
     modulo: "MODULO",
     factorial: "FACTORIAL",
     openingBrace: "OPENING-BRACE",
-    closingBrace: "CLOSING-BRACE",
+    closingBrace: "CLOSING-BRACE"
   },
+
   lastKeyWasOperation: false,
   lastKeyWasDot: false,
+
   clearDisplay: function() {
-    $('#preview').html("");
+    preview = "";
+    $('#preview').html(preview);
     $('#result').html("0");    
   },
+
   deleteCharFromPreview: function() {
-    var preview = $('#preview').html();
-    $('#preview').html(preview.slice(0, preview.length-1));
+    preview = preview.slice(0, preview.length-1);
+    $('#preview').html(preview);
   },
+
   calculateResult: function() {
     var result = eval($('#preview').html()) + '';
     $('#result').html(result);
     $('#preview').html(result);
   },
-  handleInput: function(val) {
-    if (val == 'X') {
-      val = '*';
-    }
 
-    switch(val) {
-    case Calci.constants.ac:
-      Calci.clearDisplay();
-      break;
-    case Calci.constants.del:
-      Calci.deleteCharFromPreview();
-      break;
-    case '=':
-      Calci.calculateResult();
-      break;
-    default:
-      if(val == '.' && Calci.lastKeyWasDot) {
-        // Nothing to do. Ignore the current dot
-      } else {
-        if((['+', '-', '*', '/'].indexOf(val) != -1) && Calci.lastKeyWasOperation) {
-          Calci.deleteCharFromPreview();
-        }
-        $('#preview').html(
-          $('#preview').html() + val
-        );
-      }
+  permutation: function(number) {
+    var nFact = 1;
+    for (var i = 1; i <= number; i++) {
+      nFact *= i;
     }
-
-    if (val == '.') {
-      Calci.lastKeyWasDot = true;
-    } else {
-      Calci.lastKeyWasDot = false;
-    }
-
-    if (['+', '-', '*', '/'].indexOf(val) == -1) {
-      Calci.lastKeyWasOperation = false;
-    } else {
-      Calci.lastKeyWasOperation = true;
-    }
+    $('#result').html(nFact);
+    $('#preview').html(nFact);
   },
+
+  handleInput: function(val) {
+    if(!isNaN(val)) {
+      preview += val;
+      $('#preview').html(preview);
+    } else if (val == Calci.constants.ac) {
+      Calci.clearDisplay();
+    } else if (val == Calci.constants.del) {
+      Calci.deleteCharFromPreview();
+    } else if (val == Calci.constants.factorial) {
+      var previous = preview;
+      Calci.permutation(previous);
+    } else if (val == Calci.constants.inverse) {
+      previous = preview;
+      result = 1/previous
+      $('#preview').html(result);
+      $('#result').html(result);
+    }
+
+  },
+  
   watchKeyClick: function() {
     $('.key').click(function(event){
-      Calci.handleInput($(this).text());
+      Calci.handleInput($(this).data("code"));
     });
   },
+
   handleInputFunctionWrapper: function(val) {
     return function() {
       Calci.handleInput(val);
@@ -115,6 +113,7 @@ Calci = {
       setTimeout(function(){ $(eleId).removeClass('active'); }, 200);
     }
   },
+
   watchKeyPress: function() {
     var keys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '+', '-', '*', '/'];
     for(var i = 0; i < keys.length; i++) {
@@ -123,15 +122,7 @@ Calci = {
     $(document).bind('keyup', "esc", Calci.handleInputFunctionWrapper("AC"));
     $(document).bind('keyup', "backspace", Calci.handleInputFunctionWrapper("DEL"));
     $(document).bind('keyup', "return", Calci.handleInputFunctionWrapper("="));
-  }//,
-  // watchKeyPress: function() {
-  //   var keys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '+', '-', '*', '/'];
-  //   for(var i = 0; i < keys.length; i++) {
-  //     $(document).bind('keyup', keys[i], function() {
-  //       Calci.handleInput(keys[i]);
-  //     });
-  //   }
-  // }
+  }
 };
 
 $(document).ready(function() {
