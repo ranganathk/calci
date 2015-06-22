@@ -74,6 +74,15 @@ var Calci = {
     $('#preview').html(Calci.variables.preview);
   },
 
+  handleBraces: function(brace) {
+    if (brace == Calci.constants.openingBrace) {
+      Calci.variables.preview += "(";
+    } else {
+      Calci.variables.preview += ")";
+    }
+    $('#preview').html(Calci.variables.preview);
+  },
+
   handleInput: function(val) {
     if(!isNaN(val)) {
       Calci.variables.preview += val;
@@ -92,6 +101,12 @@ var Calci = {
       Calci.handleOperators(val);
     } else if (val == Calci.constants.eql) {
       Calci.calculateResult();
+    } else if (val == Calci.variables.dot) {
+      //Do something
+    } else if (val == Calci.constants.openingBrace || val == Calci.constants.closingBrace) {
+      Calci.handleBraces(val);
+    } else {
+      //Do something
     }
 
   },
