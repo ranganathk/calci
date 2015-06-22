@@ -24,6 +24,7 @@ var Calci = {
     pi: "pi",
     modulo: "modulo",
     factorial: "factorial",
+    answer: "answer",
     openingBrace: "opening-brace",
     closingBrace: "closing-brace"
   },
@@ -40,10 +41,15 @@ var Calci = {
   },
 
   calculateResult: function() {
-    Calci.variables.result = eval(Calci.variables.preview);
+    if (10 == 1000) {
+      // Do something
+    } else {
+      Calci.variables.result = eval(Calci.variables.preview);
+    }
+    
     $('#result').html(Calci.variables.result);
     $('#preview').html(Calci.variables.result);
-    Calci.variables.preview = Calci.variables.result;
+    Calci.variables.ans = Calci.variables.result;
   },
 
   permutation: function(number) {
@@ -68,8 +74,10 @@ var Calci = {
       Calci.variables.preview += "-";
     } else if (operator == Calci.constants.division) {
       Calci.variables.preview += "/";
-    } else {
+    } else if (operator == Calci.constants.multiply) {
       Calci.variables.preview += "*";
+    } else {
+      Calci.variables.preview += "%";
     }
     $('#preview').html(Calci.variables.preview);
   },
@@ -79,6 +87,27 @@ var Calci = {
       Calci.variables.preview += "(";
     } else {
       Calci.variables.preview += ")";
+    }
+    $('#preview').html(Calci.variables.preview);
+  },
+
+  handleFunctions: function(func) {
+    if (func == Calci.constants.pi) {
+      Calci.variables.preview += "Pi";
+    } else if (func == Calci.constants.square) {
+      Calci.variables.preview += "^2";
+
+    } else if (func == Calci.constants.sqrt) {
+      Calci.variables.preview += "^1/2";
+
+    } else if (func == Calci.constants.cubeRoot) {
+      Calci.variables.preview += "^1/3";
+
+    } else if (func == Calci.constants.exponent) {
+      // x^y
+
+    } else {
+      Calci.variables.preview += func + "(";
     }
     $('#preview').html(Calci.variables.preview);
   },
@@ -96,8 +125,6 @@ var Calci = {
     } else if (val == Calci.constants.inverse) {
       Calci.inverse(parseInt(Calci.variables.preview));
     } else if (Calci.variables.arrayOfOperators.indexOf(val) != -1) {
-      //Calci.variables.previous = "Math." + (Calci.variables.arrayOfFunctions[Calci.variables.arrayOfFunctions.indexOf(val)]).toLowerCase();
-      //$('#preview').html((Calci.variables.arrayOfFunctions[Calci.variables.arrayOfFunctions.indexOf(val)]).toLowerCase() + "(");
       Calci.handleOperators(val);
     } else if (val == Calci.constants.eql) {
       Calci.calculateResult();
@@ -105,8 +132,14 @@ var Calci = {
       //Do something
     } else if (val == Calci.constants.openingBrace || val == Calci.constants.closingBrace) {
       Calci.handleBraces(val);
+    } else if (val == Calci.constants.answer){
+      // answer is the constant that is checked against the key code, while ans is the value of the last evaluate result
+      Calci.variables.preview = Calci.variables.ans;
+      $('#preview').html(Calci.variables.preview);
     } else {
-      //Do something
+      //Calci.variables.previous = "Math." + (Calci.variables.arrayOfFunctions[Calci.variables.arrayOfFunctions.indexOf(val)]).toLowerCase();
+      //$('#preview').html((Calci.variables.arrayOfFunctions[Calci.variables.arrayOfFunctions.indexOf(val)]).toLowerCase() + "(");
+      Calci.handleFunctions(val);
     }
 
   },
@@ -162,10 +195,9 @@ var Calci = {
 Calci.variables = {
   preview: "",
   result: "",
-  previous: "",
-  current: "",
+  ans: "",
   arrayOfFunctions: [Calci.constants.square, Calci.constants.sqrt, Calci.constants.exponent, Calci.constants.cubeRoot, Calci.constants.sin, Calci.constants.cos, Calci.constants.tan, Calci.constants.exp, Calci.constants.ln, Calci.constants.log10, Calci.constants.pi],
-  arrayOfOperators: [Calci.constants.plus, Calci.constants.minus, Calci.constants.division, Calci.constants.multiply]
+  arrayOfOperators: [Calci.constants.plus, Calci.constants.minus, Calci.constants.division, Calci.constants.multiply, Calci.constants.modulo]
 }
 
 $(document).ready(function() {
