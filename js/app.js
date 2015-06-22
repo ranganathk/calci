@@ -1,51 +1,49 @@
-var preview = "";
 
-Calci = {
+
+var Calci = {
   constants: {
-    ac: "AC",
-    del: "DEL",
-    eql: "EQL",
-    plus: "PLUS",
-    minus: "MINUS",
-    division: "DIVISION",
-    multiply: "MULTIPLY",
-    dot: "DOT",
-    square: "SQUARE",
-    sqRoot: "SQUARE-ROOT",
-    inverse: "INVERSE",
-    exponent: "EXPONENT",
-    cubeRoot: "CUBE-ROOT",
-    sin: "SIN",
-    cos: "COS",
-    tan: "TAN",
-    eulerNo: "EULER-NO",
-    ln: "LN",
-    log: "LOG",
-    pi: "PI",
-    modulo: "MODULO",
-    factorial: "FACTORIAL",
-    openingBrace: "OPENING-BRACE",
-    closingBrace: "CLOSING-BRACE"
+    ac: "ac",
+    del: "del",
+    eql: "eql",
+    plus: "plus",
+    minus: "minus",
+    division: "division",
+    multiply: "multiply",
+    dot: "dot",
+    square: "square",
+    sqrt: "sqrt",
+    inverse: "inverse",
+    exponent: "exponent",
+    cubeRoot: "cube-root",
+    sin: "sin",
+    cos: "cos",
+    tan: "tan",
+    exp: "exp",
+    ln: "log",
+    log10: "log10",
+    pi: "pi",
+    modulo: "modulo",
+    factorial: "factorial",
+    openingBrace: "opening-brace",
+    closingBrace: "closing-brace"
   },
 
-  lastKeyWasOperation: false,
-  lastKeyWasDot: false,
-
   clearDisplay: function() {
-    preview = "";
-    $('#preview').html(preview);
-    $('#result').html("0");    
+    Calci.variables.preview = "";
+    $('#preview').html(Calci.variables.preview);
+    $('#result').html(Calci.variables.preview +"0");    
   },
 
   deleteCharFromPreview: function() {
-    preview = preview.slice(0, preview.length-1);
-    $('#preview').html(preview);
+    Calci.variables.preview = Calci.variables.preview.slice(0, Calci.variables.preview.length-1);
+    $('#preview').html(Calci.variables.preview);
   },
 
   calculateResult: function() {
-    var result = eval($('#preview').html()) + '';
-    $('#result').html(result);
-    $('#preview').html(result);
+    Calci.variables.result = eval(Calci.variables.preview);
+    $('#result').html(Calci.variables.result);
+    $('#preview').html(Calci.variables.result);
+    Calci.variables.preview = Calci.variables.result;
   },
 
   permutation: function(number) {
@@ -57,22 +55,43 @@ Calci = {
     $('#preview').html(nFact);
   },
 
+  inverse: function(number) {
+    var inverseNum = 1/number;
+    $('#preview').html(inverseNum);
+    $('#result').html(inverseNum);
+  },
+
+  handleOperators: function (operator) {
+    if (operator == Calci.constants.plus) {
+      Calci.variables.preview += "+";
+    } else if (operator == Calci.constants.minus) {
+      Calci.variables.preview += "-";
+    } else if (operator == Calci.constants.division) {
+      Calci.variables.preview += "/";
+    } else {
+      Calci.variables.preview += "*";
+    }
+    $('#preview').html(Calci.variables.preview);
+  },
+
   handleInput: function(val) {
     if(!isNaN(val)) {
-      preview += val;
-      $('#preview').html(preview);
+      Calci.variables.preview += val;
+      $('#preview').html(Calci.variables.preview);
     } else if (val == Calci.constants.ac) {
       Calci.clearDisplay();
     } else if (val == Calci.constants.del) {
       Calci.deleteCharFromPreview();
     } else if (val == Calci.constants.factorial) {
-      var previous = preview;
-      Calci.permutation(previous);
+      Calci.permutation(parseInt(Calci.variables.preview));
     } else if (val == Calci.constants.inverse) {
-      previous = preview;
-      result = 1/previous
-      $('#preview').html(result);
-      $('#result').html(result);
+      Calci.inverse(parseInt(Calci.variables.preview));
+    } else if (Calci.variables.arrayOfOperators.indexOf(val) != -1) {
+      //Calci.variables.previous = "Math." + (Calci.variables.arrayOfFunctions[Calci.variables.arrayOfFunctions.indexOf(val)]).toLowerCase();
+      //$('#preview').html((Calci.variables.arrayOfFunctions[Calci.variables.arrayOfFunctions.indexOf(val)]).toLowerCase() + "(");
+      Calci.handleOperators(val);
+    } else if (val == Calci.constants.eql) {
+      Calci.calculateResult();
     }
 
   },
@@ -124,6 +143,15 @@ Calci = {
     $(document).bind('keyup', "return", Calci.handleInputFunctionWrapper("="));
   }
 };
+
+Calci.variables = {
+  preview: "",
+  result: "",
+  previous: "",
+  current: "",
+  arrayOfFunctions: [Calci.constants.square, Calci.constants.sqrt, Calci.constants.exponent, Calci.constants.cubeRoot, Calci.constants.sin, Calci.constants.cos, Calci.constants.tan, Calci.constants.exp, Calci.constants.ln, Calci.constants.log10, Calci.constants.pi],
+  arrayOfOperators: [Calci.constants.plus, Calci.constants.minus, Calci.constants.division, Calci.constants.multiply]
+}
 
 $(document).ready(function() {
   Calci.watchKeyClick();
