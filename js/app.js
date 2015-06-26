@@ -19,8 +19,8 @@ var Calci = {
     cos: "cos",
     tan: "tan",
     exp: "exp",
-    ln: "log",
-    log10: "log10",
+    ln: "ln",
+    log: "log",
     pi: "pi",
     modulo: "modulo",
     factorial: "factorial",
@@ -41,15 +41,23 @@ var Calci = {
   },
 
   calculateResult: function() {
-    if (10 == 1000) {
-      // Do something
+
+    Calci.variables.newVar = (Calci.variables.preview).replace(/sin|cos|tan|exp|Pi|sqrt|ln|log/g, function myFunction1(x){if (x.toLowerCase() == Calci.constants.pi) {return "Math." + x.toUpperCase();} else if (x == Calci.constants.ln) {return "Math.log";} else if (x == Calci.constants.log) {return "Math.log10";} else {return "Math." + x;}});
+    var regexBox = Calci.variables.newVar.match(/-?\d+\.?\d*\^-?\d+\.?\d*\/?\d*/);
+
+    if (regexBox != null) {
+      var baseAndPower = regexBox[0].split("^");
+      Calci.variables.toEval = Calci.variables.newVar.replace(regexBox[0], "Math.pow(" + baseAndPower[0] + "," + baseAndPower[1] + ")");
     } else {
-      Calci.variables.result = eval(Calci.variables.preview);
+      Calci.variables.toEval = Calci.variables.newVar;
     }
+    
+    Calci.variables.result = eval(Calci.variables.toEval);
     
     $('#result').html(Calci.variables.result);
     $('#preview').html(Calci.variables.result);
     Calci.variables.ans = Calci.variables.result;
+    Calci.variables.preview = "";
   },
 
   permutation: function(number) {
@@ -96,16 +104,10 @@ var Calci = {
       Calci.variables.preview += "Pi";
     } else if (func == Calci.constants.square) {
       Calci.variables.preview += "^2";
-
-    } else if (func == Calci.constants.sqrt) {
-      Calci.variables.preview += "^1/2";
-
     } else if (func == Calci.constants.cubeRoot) {
       Calci.variables.preview += "^1/3";
-
     } else if (func == Calci.constants.exponent) {
-      // x^y
-
+      Calci.variables.preview += "^";
     } else {
       Calci.variables.preview += func + "(";
     }
@@ -136,9 +138,9 @@ var Calci = {
       // answer is the constant that is checked against the key code, while ans is the value of the last evaluate result
       Calci.variables.preview = Calci.variables.ans;
       $('#preview').html(Calci.variables.preview);
+    } else if (val == Calci.constants.dot){
+      // do something
     } else {
-      //Calci.variables.previous = "Math." + (Calci.variables.arrayOfFunctions[Calci.variables.arrayOfFunctions.indexOf(val)]).toLowerCase();
-      //$('#preview').html((Calci.variables.arrayOfFunctions[Calci.variables.arrayOfFunctions.indexOf(val)]).toLowerCase() + "(");
       Calci.handleFunctions(val);
     }
 
@@ -193,6 +195,8 @@ var Calci = {
 };
 
 Calci.variables = {
+  toEval: "",
+  newVar: "",
   preview: "",
   result: "",
   ans: "",
@@ -204,3 +208,7 @@ $(document).ready(function() {
   Calci.watchKeyClick();
   Calci.watchKeyPress();
 });
+
+
+
+//var b = a.match(/([-+]?[0-9]*\.?[0-9]+)\^([-+]?[0-9]*\.?[0-9]+)\/?([0-9]*\.?[0-9]+)?/gi, function myFunction2(x){var c = x.split("^"); return c});
