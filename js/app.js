@@ -13,7 +13,6 @@ var Calci = {
     square: "square",
     sqrt: "sqrt",
     inverse: "inverse",
-    exponent: "exponent",
     cubeRoot: "cube-root",
     sin: "sin",
     cos: "cos",
@@ -47,6 +46,7 @@ var Calci = {
 
     if (regexBox != null) {
       var baseAndPower = regexBox[0].split("^");
+      console.log(baseAndPower);
       Calci.variables.toEval = Calci.variables.newVar.replace(regexBox[0], "Math.pow(" + baseAndPower[0] + "," + baseAndPower[1] + ")");
     } else {
       Calci.variables.toEval = Calci.variables.newVar;
@@ -57,7 +57,7 @@ var Calci = {
     $('#result').html(Calci.variables.result);
     $('#preview').html(Calci.variables.result);
     Calci.variables.ans = Calci.variables.result;
-    Calci.variables.preview = "";
+    Calci.variables.preview = Calci.variables.result;
   },
 
   permutation: function(number) {
@@ -114,6 +114,25 @@ var Calci = {
     $('#preview').html(Calci.variables.preview);
   },
 
+  handleDot: function () {
+
+    var arrayOfFunsAndOps = ["+", "-", "/", "*", "^", "sqrt", "exp", "sin", "cos", "tan", "ln", "log", "Pi"];
+    var index = 0;
+    
+    for (var i = 0; i < arrayOfFunsAndOps.length; i++) {
+      if(index < Calci.variables.preview.lastIndexOf(arrayOfFunsAndOps[i])) {
+        index = Calci.variables.preview.lastIndexOf(arrayOfFunsAndOps[i]);
+      }
+    }
+
+    if (index >= Calci.variables.preview.lastIndexOf(".")) {
+      Calci.variables.preview += ".";
+    } 
+
+    $('#preview').html(Calci.variables.preview); 
+
+  },
+
   handleInput: function(val) {
     if(!isNaN(val)) {
       Calci.variables.preview += val;
@@ -130,8 +149,6 @@ var Calci = {
       Calci.handleOperators(val);
     } else if (val == Calci.constants.eql) {
       Calci.calculateResult();
-    } else if (val == Calci.variables.dot) {
-      //Do something
     } else if (val == Calci.constants.openingBrace || val == Calci.constants.closingBrace) {
       Calci.handleBraces(val);
     } else if (val == Calci.constants.answer){
@@ -139,11 +156,10 @@ var Calci = {
       Calci.variables.preview = Calci.variables.ans;
       $('#preview').html(Calci.variables.preview);
     } else if (val == Calci.constants.dot){
-      // do something
+      Calci.handleDot();
     } else {
       Calci.handleFunctions(val);
     }
-
   },
   
   watchKeyClick: function() {
@@ -200,7 +216,7 @@ Calci.variables = {
   preview: "",
   result: "",
   ans: "",
-  arrayOfFunctions: [Calci.constants.square, Calci.constants.sqrt, Calci.constants.exponent, Calci.constants.cubeRoot, Calci.constants.sin, Calci.constants.cos, Calci.constants.tan, Calci.constants.exp, Calci.constants.ln, Calci.constants.log10, Calci.constants.pi],
+  arrayOfFunctions: [Calci.constants.square, Calci.constants.sqrt, Calci.constants.exponent, Calci.constants.cubeRoot, Calci.constants.sin, Calci.constants.cos, Calci.constants.tan, Calci.constants.exp, Calci.constants.ln, Calci.constants.log, Calci.constants.pi],
   arrayOfOperators: [Calci.constants.plus, Calci.constants.minus, Calci.constants.division, Calci.constants.multiply, Calci.constants.modulo]
 }
 
@@ -211,4 +227,3 @@ $(document).ready(function() {
 
 
 
-//var b = a.match(/([-+]?[0-9]*\.?[0-9]+)\^([-+]?[0-9]*\.?[0-9]+)\/?([0-9]*\.?[0-9]+)?/gi, function myFunction2(x){var c = x.split("^"); return c});
