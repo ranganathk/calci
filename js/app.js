@@ -136,21 +136,31 @@ var Calci = {
   handleInput: function(val) {
     if(!isNaN(val)) {
       if (Calci.variables.preview == "0" && val == "0") {
+        //do nothing
       } else {
+        if (Calci.variables.lastKeyPressedIsEval) {
+          Calci.variables.preview = "";
+          Calci.variables.lastKeyPressedIsEval = false;
+        }
         Calci.variables.preview += val;
       }
+      
       $('#preview').html(Calci.variables.preview);
     } else if (val == Calci.constants.ac) {
+      Calci.variables.lastKeyPressedIsEval = false;
       Calci.clearDisplay();
     } else if (val == Calci.constants.del) {
+      Calci.variables.lastKeyPressedIsEval = false;
       Calci.deleteCharFromPreview();
     } else if (val == Calci.constants.factorial) {
       Calci.permutation(parseInt(Calci.variables.preview));
     } else if (val == Calci.constants.inverse) {
       Calci.inverse(parseInt(Calci.variables.preview));
     } else if (Calci.variables.arrayOfOperators.indexOf(val) != -1) {
+      Calci.variables.lastKeyPressedIsEval = false;
       Calci.handleOperators(val);
     } else if (val == Calci.constants.eql) {
+      Calci.variables.lastKeyPressedIsEval = true;
       Calci.calculateResult();
     } else if (val == Calci.constants.openingBrace || val == Calci.constants.closingBrace) {
       Calci.handleBraces(val);
@@ -214,6 +224,7 @@ var Calci = {
 };
 
 Calci.variables = {
+  lastKeyPressedIsEval: false,
   toEval: "",
   newVar: "",
   preview: "",
