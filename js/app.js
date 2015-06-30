@@ -116,7 +116,7 @@ var Calci = {
 
   handleDot: function () {
 
-    var arrayOfFunsAndOps = ["+", "-", "/", "*", "^", "sqrt", "exp", "sin", "cos", "tan", "ln", "log", "Pi"];
+    var arrayOfFunsAndOps = ["+", "-", "/", "*", "^"];
     var index = 0;
     
     for (var i = 0; i < arrayOfFunsAndOps.length; i++) {
@@ -135,7 +135,10 @@ var Calci = {
 
   handleInput: function(val) {
     if(!isNaN(val)) {
-      Calci.variables.preview += val;
+      if (Calci.variables.preview == "0" && val == "0") {
+      } else {
+        Calci.variables.preview += val;
+      }
       $('#preview').html(Calci.variables.preview);
     } else if (val == Calci.constants.ac) {
       Calci.clearDisplay();

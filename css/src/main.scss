@@ -6,6 +6,10 @@ $secondary-color: #ecf0f1; // Clouds
   position: relative;
   top: 50%;
   transform: translateY(-50%);
+  
+  .key.sci {
+    background-color: #2ecc71;
+  }
 }
 
 html {
