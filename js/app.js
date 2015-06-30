@@ -12,6 +12,7 @@ var Calci = {
     dot: "dot",
     square: "square",
     sqrt: "sqrt",
+    exponent: "exponent",
     inverse: "inverse",
     cubeRoot: "cube-root",
     sin: "sin",
@@ -31,7 +32,7 @@ var Calci = {
   clearDisplay: function() {
     Calci.variables.preview = "";
     $('#preview').html(Calci.variables.preview);
-    $('#result').html(Calci.variables.preview +"0");    
+    $('#result').html(Calci.variables.preview + "0");    
   },
 
   deleteCharFromPreview: function() {
@@ -39,18 +40,21 @@ var Calci = {
     $('#preview').html(Calci.variables.preview);
   },
 
-  calculateResult: function() {
-
+  replaceVariables: function() {
     Calci.variables.newVar = (Calci.variables.preview).replace(/sin|cos|tan|exp|Pi|sqrt|ln|log/g, function myFunction1(x){if (x.toLowerCase() == Calci.constants.pi) {return "Math." + x.toUpperCase();} else if (x == Calci.constants.ln) {return "Math.log";} else if (x == Calci.constants.log) {return "Math.log10";} else {return "Math." + x;}});
     var regexBox = Calci.variables.newVar.match(/-?\d+\.?\d*\^-?\d+\.?\d*\/?\d*/);
 
     if (regexBox != null) {
       var baseAndPower = regexBox[0].split("^");
-      console.log(baseAndPower);
-      Calci.variables.toEval = Calci.variables.newVar.replace(regexBox[0], "Math.pow(" + baseAndPower[0] + "," + baseAndPower[1] + ")");
+      return Calci.variables.newVar.replace(regexBox[0], "Math.pow(" + baseAndPower[0] + "," + baseAndPower[1] + ")");
     } else {
-      Calci.variables.toEval = Calci.variables.newVar;
+      return Calci.variables.newVar;
     }
+  },
+
+  calculateResult: function() {
+    
+    Calci.variables.toEval = Calci.replaceVariables();
     
     Calci.variables.result = eval(Calci.variables.toEval);
     
@@ -76,16 +80,20 @@ var Calci = {
   },
 
   handleOperators: function (operator) {
-    if (operator == Calci.constants.plus) {
-      Calci.variables.preview += "+";
-    } else if (operator == Calci.constants.minus) {
-      Calci.variables.preview += "-";
-    } else if (operator == Calci.constants.division) {
-      Calci.variables.preview += "/";
-    } else if (operator == Calci.constants.multiply) {
-      Calci.variables.preview += "*";
+    if (Calci.variables.preview == "") {
+      //Do nothing
     } else {
-      Calci.variables.preview += "%";
+      if (operator == Calci.constants.plus) {
+        Calci.variables.preview += "+";
+      } else if (operator == Calci.constants.minus) {
+        Calci.variables.preview += "-";
+      } else if (operator == Calci.constants.division) {
+        Calci.variables.preview += "/";
+      } else if (operator == Calci.constants.multiply) {
+        Calci.variables.preview += "*";
+      } else {
+        Calci.variables.preview += "%";
+      }
     }
     $('#preview').html(Calci.variables.preview);
   },
@@ -95,6 +103,19 @@ var Calci = {
       Calci.variables.preview += "(";
     } else {
       Calci.variables.preview += ")";
+    }
+    $('#preview').html(Calci.variables.preview);
+  },
+
+  handleNumber: function(number) {
+    if (Calci.variables.preview == "0" && number == "0") {
+        //do nothing
+    } else {
+      if (Calci.variables.lastKeyPressedIsEval) {
+        Calci.variables.preview = "";
+        Calci.variables.lastKeyPressedIsEval = false;
+      }
+      Calci.variables.preview += number;
     }
     $('#preview').html(Calci.variables.preview);
   },
@@ -135,17 +156,7 @@ var Calci = {
 
   handleInput: function(val) {
     if(!isNaN(val)) {
-      if (Calci.variables.preview == "0" && val == "0") {
-        //do nothing
-      } else {
-        if (Calci.variables.lastKeyPressedIsEval) {
-          Calci.variables.preview = "";
-          Calci.variables.lastKeyPressedIsEval = false;
-        }
-        Calci.variables.preview += val;
-      }
-      
-      $('#preview').html(Calci.variables.preview);
+      Calci.handleNumber(val);
     } else if (val == Calci.constants.ac) {
       Calci.variables.lastKeyPressedIsEval = false;
       Calci.clearDisplay();
@@ -223,6 +234,8 @@ var Calci = {
   }
 };
 
+// since functions above are not initiated above, these variables have to be initiated here.
+// problem caused by hoisting
 Calci.variables = {
   lastKeyPressedIsEval: false,
   toEval: "",
