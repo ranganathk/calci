@@ -35,6 +35,9 @@ html {
       line-height: 12vmin;
       font-size: 3vmin;
       border: 1px solid #9b59b6; }
+      html #calculator .key.sci {
+        background-color: #2ecc71;
+        background-color: #9b50ba; }
       html #calculator .key:hover {
         background-color: #9b59b6; }
       html #calculator .key:active, html #calculator .key.active {

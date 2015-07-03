@@ -57,6 +57,11 @@ var Calci = {
     Calci.variables.toEval = Calci.replaceVariables();
     
     Calci.variables.result = eval(Calci.variables.toEval);
+    var rounded = Math.round(Calci.variables.result);
+
+    if (rounded - Calci.variables.result < 0.00000000000001) {
+      Calci.variables.result = rounded;
+    }
     
     $('#result').html(Calci.variables.result);
     $('#preview').html(Calci.variables.result);
@@ -138,7 +143,7 @@ var Calci = {
   handleDot: function () {
 
     var arrayOfFunsAndOps = ["+", "-", "/", "*", "^"];
-    var index = 0;
+    var index = -500;
     
     for (var i = 0; i < arrayOfFunsAndOps.length; i++) {
       if(index < Calci.variables.preview.lastIndexOf(arrayOfFunsAndOps[i])) {

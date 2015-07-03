@@ -7,9 +7,6 @@ $secondary-color: #ecf0f1; // Clouds
   top: 50%;
   transform: translateY(-50%);
   
-  .key.sci {
-    background-color: #2ecc71;
-  }
 }
 
 html {
@@ -52,6 +49,11 @@ html {
       line-height: 12vmin;
       font-size: 3vmin;
       border: 1px solid $lighter-primary-color;
+      
+      &.sci {
+        background-color: #2ecc71;
+        background-color: lighten($primary-color, 5%);
+      }
 
       
       
