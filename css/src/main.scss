@@ -6,6 +6,7 @@ $secondary-color: #ecf0f1; // Clouds
   position: relative;
   top: 50%;
   transform: translateY(-50%);
+  
 }
 
 html {
@@ -16,8 +17,8 @@ html {
   }
   
   #calculator {
-    width: 48vmin;
-    height: 84vmin;
+    width: 84vmin;
+    height: 96vmin;
     background-color: $lighter-primary-color;
     color: $secondary-color;
     
@@ -48,11 +49,13 @@ html {
       line-height: 12vmin;
       font-size: 3vmin;
       border: 1px solid $lighter-primary-color;
-
-      &#key-PLUS {
-        height: 24vmin;
-        line-height: 24vmin;
+      
+      &.sci {
+        background-color: #2ecc71;
+        background-color: lighten($primary-color, 5%);
       }
+
+      
       
       &:hover {
         background-color: $lighter-primary-color;
